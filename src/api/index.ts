@@ -1,4 +1,6 @@
-export function fakeApiFetch<T = unknown>(key: string): Promise<T | null> {
+export function fakeApiFetch<T = unknown>(
+  key: "posts" | "following" | "user" | "users",
+): Promise<T | null> {
   return new Promise((resolve) => {
     setTimeout(() => {
       const data = localStorage.getItem(key);
@@ -7,6 +9,9 @@ export function fakeApiFetch<T = unknown>(key: string): Promise<T | null> {
   });
 }
 
-export function fakeApiSave<T = unknown>(key: string, value: T): void {
+export function fakeApiSave<T = unknown>(
+  key: "posts" | "following" | "user" | "users",
+  value: T,
+): void {
   localStorage.setItem(key, JSON.stringify(value));
 }

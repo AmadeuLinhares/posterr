@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fakeApiFetch } from "../api";
-import type { FollowingResponse } from "./useGetFollowing";
+import { toast } from "sonner";
 
 export interface PostsResponse {
   id: string;
@@ -11,6 +11,7 @@ export interface PostsResponse {
   isQuote: boolean;
   userName: string;
   content: string;
+  parent: Omit<PostsResponse, "children">[];
 }
 
 interface PostRequest {
@@ -26,15 +27,18 @@ export const useFetchPots = ({ kind }: PostRequest) => {
       if (!response) {
         const message = `Failed to fetch posts`;
         //TODO: Implement toast
-        // toast.error(message);
+        toast.error(message);
         throw new Error(message);
       }
 
-      if (kind === "all") return response;
+      const formatted = response.map((current) => ({
+        ...current,
+        parent: response.filter((child) => child.id === current.parent_id),
+      }));
 
-      const following = await fakeApiFetch<FollowingResponse[]>("following");
+      if (kind === "all") return formatted;
 
-      const ids = following?.map((current) => current.id);
+      const ids = await fakeApiFetch<string[]>("following");
 
       if (!!ids && ids.length) {
         return response.filter((current) => ids.includes(current.owner_id));
