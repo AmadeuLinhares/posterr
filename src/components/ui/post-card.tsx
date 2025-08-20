@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import type { PostsResponse } from "../../queries/useFetchPots";
 import { Avatar, AvatarImage } from "./avatar";
-import { RotateCw } from "lucide-react";
+import { RotateCw, MessageSquareQuote, RedoDot } from "lucide-react";
+import { Button } from "./button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 export const PostCard = ({
   userName,
@@ -81,6 +83,30 @@ export const PostCard = ({
 
       <div>
         <p>{post}</p>
+      </div>
+
+      <div className="flex justify-start items-center gap-2">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant={"ghost"}>
+              <MessageSquareQuote />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Quote</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant={"ghost"}>
+              <RedoDot />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Repost</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
       {quote}
     </div>

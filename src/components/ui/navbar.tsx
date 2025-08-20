@@ -1,10 +1,18 @@
 import { useFetchProfile } from "@/queries/useFetchProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Skeleton } from "./skeleton";
+import { useLocation, useNavigate } from "react-router";
 
 const Nav = () => {
   const { data, isLoading } = useFetchProfile();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleProfile = useCallback(() => {
+    // push so that "Back" closes modal and returns to /feed
+    navigate("/profile", { state: { backgroundLocation: location } });
+  }, [navigate, location]);
 
   const loading = useMemo(() => {
     if (!isLoading) return null;
@@ -17,7 +25,7 @@ const Nav = () => {
   }, [isLoading]);
 
   return (
-    <div className="px-6 py-4 w-full bg-primary rounded-b-2xl">
+    <div className="px-6 py-4 w-full bg-primary rounded-b-2xl sticky top-0 z-10">
       {loading}
 
       {!isLoading && (
@@ -26,7 +34,7 @@ const Nav = () => {
             <h3 className="text-secondary text-xl font-bold">P O S T E R R</h3>
           </div>
           <div>
-            <Avatar className="w-[40px] h-[40px]">
+            <Avatar onClick={handleProfile} className="w-[40px] h-[40px]">
               <AvatarImage loading={"eager"} src={data?.avatar} />
               <AvatarFallback></AvatarFallback>
             </Avatar>

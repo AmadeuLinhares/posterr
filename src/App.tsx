@@ -1,25 +1,77 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useLocation } from "react-router";
+// import { Feed } from "./pages/Feed";
+import { useMemo } from "react";
 import { Feed } from "./pages/Feed";
+import { Profile } from "./pages/Profile";
+import ProfileModal from "./pages/Profile/components/profileModal";
 
-function App() {
+// function App() {
+//   return (
+//     <Routes>
+//       <Route index element={<Navigate to="/feed" replace />} />
+//       <Route path="feed" element={<Home />} />
+//       <Route path="profile" element={<Home />} />
+
+//       {/*<Route index element={<Navigate to="/feed" replace />} />
+//       <Route path="feed" element={<Home />} />
+//       <Route path="profile" element={<Home />} />*/}
+
+//       {/*<Route path="about" element={<About />} />
+
+//       <Route element={<AuthLayout />}>
+//         <Route path="login" element={<Login />} />
+//         <Route path="register" element={<Register />} />
+//       </Route>
+
+//       <Route path="concerts">
+//         <Route index element={<ConcertsHome />} />
+//         <Route path=":city" element={<City />} />
+//         <Route path="trending" element={<Trending />} />
+//       </Route>*/}
+//     </Routes>
+//   );
+// }
+
+// export default App;
+
+export default function App() {
+  const location = useLocation();
+  const state = location.state as { backgroundLocation?: Location } | null;
+
+  // When opening the modal from /feed we pass state.backgroundLocation.
+  // If it exists, render the "underlay" using it; otherwise use current location.
+  const underlayLocation = useMemo(
+    () => state?.backgroundLocation || location,
+    [state, location],
+  );
+
   return (
-    <Routes>
-      <Route index element={<Navigate to="/feed" replace />} />
-      <Route path="feed" element={<Feed />} />
-      {/*<Route path="about" element={<About />} />
+    <>
+      {/* Underlay (what stays behind the modal) */}
+      <Routes location={underlayLocation}>
+        <Route path="/" element={<Navigate to="/feed" replace />} />
+        <Route path="/feed" element={<Feed />} />
+        {/* Full-page fallback if user hits /profile directly */}
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
 
-      <Route element={<AuthLayout />}>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-      </Route>
-
-      <Route path="concerts">
-        <Route index element={<ConcertsHome />} />
-        <Route path=":city" element={<City />} />
-        <Route path="trending" element={<Trending />} />
-      </Route>*/}
-    </Routes>
+      {/* Modal layer (only when opened from a background route) */}
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <ProfileModal
+                onClose={() =>
+                  window.history.length
+                    ? history.back()
+                    : (window.location.href = "/feed")
+                }
+              />
+            }
+          />
+        </Routes>
+      )}
+    </>
   );
 }
-
-export default App;
