@@ -8,9 +8,9 @@ export const PostCard = ({
   avatar,
   content,
   created_at,
-  id,
+  // id,
   isQuote,
-  owner_id,
+  // owner_id,
   parent_id,
   parent,
 }: PostsResponse) => {

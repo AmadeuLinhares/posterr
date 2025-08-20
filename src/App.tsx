@@ -1,10 +1,11 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import { Feed } from "./pages/Feed";
 
 function App() {
   return (
     <Routes>
-      <Route index element={<Feed />} />
+      <Route index element={<Navigate to="/feed" replace />} />
+      <Route path="feed" element={<Feed />} />
       {/*<Route path="about" element={<About />} />
 
       <Route element={<AuthLayout />}>
