@@ -2,6 +2,15 @@
 
 I developed a modern social feed application where users can create posts, repost content, and interact with others in real time. The project was built with a strong focus on developer experience, performance, and scalability.
 
+🔧 Configs
+	• A function called injectMock was created to inject the necessary information to run the system. If you want to run thhe project from strach, please clean your local storage and reload the page.
+	• packmanager: pnpm
+	• Node version: v24.0.1
+
+🚀 Start project
+	• pnpm i
+	• pnpm run dev
+
 🔧 Tech Highlights
 	•	React Query (TanStack Query) → for powerful server-state management, cache updates, infinite queries for feeds, and optimistic UI when following/unfollowing users.
 	•	shadcn/ui → provided accessible, Radix-based UI primitives with full Tailwind customization (Drawer, Tabs, Avatar, Tooltip, etc.), allowing me to implement a consistent and theme-aware design system.
