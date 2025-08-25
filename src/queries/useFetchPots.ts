@@ -1,5 +1,6 @@
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { fakeApiFetch } from "../api";
+import type { FollowingResponse } from "./useFetchFollowing";
 
 export interface PostsResponse {
   id: string;
@@ -11,6 +12,7 @@ export interface PostsResponse {
   userName: string;
   content: string;
   parent: PostsResponse[];
+  isFollowing: boolean;
 }
 
 interface PostRequest {
@@ -18,7 +20,7 @@ interface PostRequest {
   page: number;
 }
 
-interface FetchPosts {
+export interface FetchPosts {
   page: number;
   totalPages: number;
   posts: PostsResponse[];
@@ -28,6 +30,8 @@ const PAGINATION = 10;
 
 const fetchPosts = async ({ kind, page }: PostRequest): Promise<FetchPosts> => {
   const response = await fakeApiFetch<PostsResponse[]>("posts");
+  const following = await fakeApiFetch<FollowingResponse[]>("following");
+  const ids = following?.map((current) => current.id);
 
   const emptyResponse = {
     page: 1,
@@ -45,7 +49,13 @@ const fetchPosts = async ({ kind, page }: PostRequest): Promise<FetchPosts> => {
 
     const formatted = paginated.map((current) => ({
       ...current,
-      parent: response?.filter((child) => child.id === current.parent_id),
+      parent: response
+        ?.filter((child) => child.id === current.parent_id)
+        .map((val) => ({
+          ...val,
+          isFollowing: !!ids?.includes(val.owner_id),
+        })),
+      isFollowing: !!ids?.includes(current.owner_id),
     }));
 
     return {
@@ -55,12 +65,10 @@ const fetchPosts = async ({ kind, page }: PostRequest): Promise<FetchPosts> => {
     };
   }
 
-  const ids = await fakeApiFetch<string[]>("following");
-
-  if (!ids?.length) return emptyResponse;
+  if (!following?.length) return emptyResponse;
 
   const followedUsers = response.filter((current) =>
-    ids.includes(current.owner_id),
+    ids?.includes(current.owner_id),
   );
 
   const totalPages = Math.round(followedUsers?.length ?? 0 / PAGINATION);
@@ -71,6 +79,7 @@ const fetchPosts = async ({ kind, page }: PostRequest): Promise<FetchPosts> => {
   const formatted = paginated.map((current) => ({
     ...current,
     parent: response?.filter((child) => child.id === current.parent_id),
+    isFollowing: !!ids?.includes(current.owner_id),
   }));
 
   return {

@@ -9,14 +9,21 @@ import { useSearchParams } from "react-router";
 import { filterSchema } from "./components/filter/schemas";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Frown } from "lucide-react";
+import { CreatePost } from "@/components/ui/create-post";
 
 export const Feed = () => {
   const [searchParams] = useSearchParams();
 
   const { filters } = filterSchema.parse(Object.fromEntries(searchParams));
 
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
-    useFetchPots({ kind: filters });
+  const {
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isFetching,
+  } = useFetchPots({ kind: filters });
 
   const handleInView = useCallback(
     (inView: boolean) => {
@@ -32,21 +39,23 @@ export const Feed = () => {
     [data],
   );
 
-  if (isLoading) {
+  if ((isLoading || isFetching) && !isFetchingNextPage) {
     return <PostSkeleton />;
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 relative">
       <Filter />
       <div className="grid gap-4  h-full">
         {posts.length ? (
-          posts.map((current) => <PostCard key={current.id} {...current} />)
+          posts.map((current) => (
+            <PostCard hideFollowActions={true} key={current.id} {...current} />
+          ))
         ) : (
           <EmptyState
             content={<Frown size={80} />}
             title="Oh no!! No posts available"
-            description="Try to follow more users or post in your feed to be able to see some posts here"
+            description="Try to follow more users"
           />
         )}
 
@@ -61,6 +70,7 @@ export const Feed = () => {
           </InView>
         )}
       </div>
+      <CreatePost />
     </div>
   );
 };

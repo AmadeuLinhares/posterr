@@ -1,17 +1,22 @@
 export function fakeApiFetch<T = unknown>(
-  key: "posts" | "following" | "user" | "users",
+  key: "posts" | "following" | "user" | "users" | "follow",
 ): Promise<T | null> {
   return new Promise((resolve) => {
     setTimeout(() => {
       const data = localStorage.getItem(key);
       resolve(data ? (JSON.parse(data) as T) : null);
-    }, 2000); // ⏱ 2s delay
+    }, 1000); // ⏱ 1s delay
   });
 }
 
 export function fakeApiSave<T = unknown>(
-  key: "posts" | "following" | "user" | "users",
+  key: "posts" | "following" | "user" | "users" | "follow",
   value: T,
-): void {
-  localStorage.setItem(key, JSON.stringify(value));
+): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      localStorage.setItem(key, JSON.stringify(value));
+      resolve();
+    }, 1000); // ⏱ 1s delay
+  });
 }

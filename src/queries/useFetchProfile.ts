@@ -1,6 +1,8 @@
 import { fakeApiFetch } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import type { FollowingResponse } from "./useFetchFollowing";
+import { fetchUserPosts } from "./useFetchUserPosts";
 
 export interface UserResponse {
   id: string;
@@ -17,6 +19,8 @@ export const useFetchProfile = () => {
     queryKey: ["profile"],
     queryFn: async (): Promise<UserResponse> => {
       const response = await fakeApiFetch<UserResponse>("user");
+      const following = await fakeApiFetch<FollowingResponse[]>("following");
+      const posts = await fetchUserPosts({ userId: response?.id });
 
       if (!response) {
         const message = `Failed to profile information`;
@@ -24,7 +28,11 @@ export const useFetchProfile = () => {
         throw new Error(message);
       }
 
-      return response;
+      return {
+        ...response,
+        following: following?.length ?? 0,
+        posts_count: posts.length,
+      };
     },
   });
 };

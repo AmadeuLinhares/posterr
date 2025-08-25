@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PostsResponse } from "./useFetchPots";
 import { fakeApiFetch } from "@/api";
 
-interface FetchUserPostsRequest {
+export interface FetchUserPostsRequest {
   userId?: string;
 }
 

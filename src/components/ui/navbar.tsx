@@ -36,7 +36,7 @@ const Nav = () => {
           <div>
             <Avatar onClick={handleProfile} className="w-[40px] h-[40px]">
               <AvatarImage loading={"eager"} src={data?.avatar} />
-              <AvatarFallback></AvatarFallback>
+              <AvatarFallback>AL</AvatarFallback>
             </Avatar>
           </div>
         </div>
