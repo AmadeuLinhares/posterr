@@ -1,69 +1,18 @@
-# React + TypeScript + Vite
+# Posterr
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+I developed a modern social feed application where users can create posts, repost content, and interact with others in real time. The project was built with a strong focus on developer experience, performance, and scalability.
 
-Currently, two official plugins are available:
+🔧 Tech Highlights
+	•	React Query (TanStack Query) → for powerful server-state management, cache updates, infinite queries for feeds, and optimistic UI when following/unfollowing users.
+	•	shadcn/ui → provided accessible, Radix-based UI primitives with full Tailwind customization (Drawer, Tabs, Avatar, Tooltip, etc.), allowing me to implement a consistent and theme-aware design system.
+	•	Zod + React Hook Form → schema-based form validation with type inference, ensuring robust input validation and clean error handling.
+	•	TypeScript → strong typing across API schemas, queries, and components for safer, maintainable code.
+	•	Date-fns → used for date formatting and utilities (e.g., “March 25, 2021” display, “isToday” checks).
+	•	Custom API Simulation (fakeApiFetch, fakeApiSave) → mimicked backend requests with delays, enabling realistic optimistic updates and cache synchronization during development.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+✨ Features
+	•	Infinite scroll feed with react-intersection-observer.
+	•	Post creation via a Drawer component with conditional validation (e.g., content required only for quotes/regular posts).
+	•	Optimistic follow/unfollow with instant UI feedback and rollback on failure.
+	•	Query param–driven UI state (e.g., opening drawer with ?isQuote=true).
+	•	Responsive, accessible design powered by Tailwind and shadcn components.
